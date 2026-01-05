@@ -11,10 +11,16 @@ import io.ktor.http.content.*
 import io.ktor.server.routing.*
 import io.ktor.server.testing.*
 import io.ktor.util.*
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import org.koin.core.context.stopKoin
 
 class RouteTests {
+    @AfterEach
+    fun tearDown() {
+        stopKoin()
+    }
     @OptIn(InternalAPI::class)
     @Test
     fun getRouteByIdTest() = testApplication {
