@@ -78,7 +78,7 @@ Specifically, you need to do the following:
 - Create the [database credentials](https://docs.couchbase.com/cloud/clusters/manage-database-users.html) to access the travel-sample bucket (Read and Write) used in the application.
 - [Allow access](https://docs.couchbase.com/cloud/clusters/allow-ip-address.html) to the Cluster from the IP on which the application is running.
 
-All configuration for communication with the database is stored in the `src/main/resources/application.conf` file under the `couchbase` section:
+The default database configuration lives in `src/main/resources/application.conf` under the `couchbase` section:
 
 ```
 couchbase {
@@ -95,7 +95,7 @@ couchbase {
 
 
 This includes the connection string, username, password, bucket and scope names. The default username is assumed to be `Administrator` and the default password is assumed to be `password`.
-If these are different in your environment you will need to change them before running the application.
+If these are different in your environment you can either update `application.conf` or set `DB_CONN_STR`, `DB_USERNAME`, and `DB_PASSWORD` before running the app. Environment variables take precedence over the file-based defaults.
 
 ## Running The Application
 
@@ -164,9 +164,9 @@ If you would like to add another entity to the APIs, these are the steps to foll
 
 If you are running this quickstart with a self managed Couchbase cluster, you need to [load](https://docs.couchbase.com/server/current/manage/manage-settings/install-sample-buckets.html) the travel-sample data bucket in your cluster and generate the credentials for the bucket.
 
-You need to update the connection string and the credentials in the [`src/main/resources/application.conf`](https://github.com/couchbase-examples/kotlin-quickstart/blob/main/src/main/resources/application.conf) file in the source folder.
+You can either update the connection string and credentials in the [`src/main/resources/application.conf`](https://github.com/couchbase-examples/kotlin-quickstart/blob/main/src/main/resources/application.conf) file or provide them with `DB_CONN_STR`, `DB_USERNAME`, and `DB_PASSWORD`.
 
-> **NOTE:** Couchbase must be installed and running prior to running the the ASP.NET app.
+> **NOTE:** Couchbase must be installed and running prior to starting the Ktor application.
 
 ### Swagger Documentation
 
