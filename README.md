@@ -95,7 +95,7 @@ couchbase {
 
 
 This includes the connection string, username, password, bucket and scope names. The default username is assumed to be `Administrator` and the default password is assumed to be `password`.
-If these are different in your environment you can either update `application.conf` or set `DB_CONN_STR`, `DB_USERNAME`, and `DB_PASSWORD` before running the app. Environment variables take precedence over the file-based defaults.
+If these are different in your environment you can either update `application.conf` or set the `DB_CONN_STR`, `DB_USERNAME`, and `DB_PASSWORD` environment variables before running the app. Those environment variables take precedence over the file-based defaults.
 
 ## Running The Application
 
