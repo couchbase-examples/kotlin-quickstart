@@ -10,7 +10,6 @@ import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.routing.*
 import io.ktor.server.testing.*
-import io.ktor.util.*
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -21,7 +20,6 @@ class RouteTests {
     fun tearDown() {
         stopKoin()
     }
-    @OptIn(InternalAPI::class)
     @Test
     fun getRouteByIdTest() = testApplication {
         val documentId = "route_test_get"
@@ -45,7 +43,7 @@ class RouteTests {
 
         // Create route
         val postResponse = client.post("/api/v1/route/$documentId") {
-            body = TextContent(routeJson, ContentType.Application.Json)
+            setBody(TextContent(routeJson, ContentType.Application.Json))
         }
         Assertions.assertEquals(HttpStatusCode.Created, postResponse.status)
         val newRouteResult = objectMapper.readValue<Route>(postResponse.bodyAsText())
@@ -77,7 +75,6 @@ class RouteTests {
         Assertions.assertEquals(HttpStatusCode.NotFound, response.status)
     }
 
-    @OptIn(InternalAPI::class)
     @Test
     fun createRouteTest() = testApplication {
         // Create route
@@ -102,7 +99,7 @@ class RouteTests {
 
         // Post the route
         val postResponse = client.post("/api/v1/route/$documentId") {
-            body = TextContent(routeJson, ContentType.Application.Json)
+            setBody(TextContent(routeJson, ContentType.Application.Json))
         }
         Assertions.assertEquals(HttpStatusCode.Created, postResponse.status)
         val newRouteResult = objectMapper.readValue<Route>(postResponse.bodyAsText())
@@ -117,7 +114,6 @@ class RouteTests {
         Assertions.assertEquals(HttpStatusCode.OK, deleteResponse.status)
     }
 
-    @OptIn(InternalAPI::class)
     @Test
     fun testAddDuplicateRoute() = testApplication {
         // Create the route
@@ -141,13 +137,13 @@ class RouteTests {
 
         // Post the route
         var postResponse = client.post("/api/v1/route/$documentId") {
-            body = TextContent(routeJson, ContentType.Application.Json)
+            setBody(TextContent(routeJson, ContentType.Application.Json))
         }
         Assertions.assertEquals(HttpStatusCode.Created, postResponse.status)
 
         // Try to create the same route again
         postResponse = client.post("/api/v1/route/$documentId") {
-            body = TextContent(routeJson, ContentType.Application.Json)
+            setBody(TextContent(routeJson, ContentType.Application.Json))
         }
         Assertions.assertEquals(HttpStatusCode.Conflict, postResponse.status)
 
@@ -156,7 +152,6 @@ class RouteTests {
         Assertions.assertEquals(HttpStatusCode.OK, deleteResponse.status)
     }
 
-    @OptIn(InternalAPI::class)
     @Test
     fun testAddRouteWithoutRequiredFields() = testApplication {
         // Arrange
@@ -175,7 +170,7 @@ class RouteTests {
 
         // Act
         val postResponse = client.post("/api/v1/route/$documentId") {
-            body = TextContent(routeJson, ContentType.Application.Json)
+            setBody(TextContent(routeJson, ContentType.Application.Json))
         }
 
         // Assert
@@ -187,7 +182,6 @@ class RouteTests {
     }
 
 
-    @OptIn(InternalAPI::class)
     @Test
     fun updateRouteTest() = testApplication {
         // Create route
@@ -212,7 +206,7 @@ class RouteTests {
 
         // Post the route
         var postResponse = client.post("/api/v1/route/$documentId") {
-            body = TextContent(routeJson, ContentType.Application.Json)
+            setBody(TextContent(routeJson, ContentType.Application.Json))
         }
         Assertions.assertEquals(HttpStatusCode.Created, postResponse.status)
         val newRouteResult = objectMapper.readValue<Route>(postResponse.bodyAsText())
@@ -236,7 +230,7 @@ class RouteTests {
 
         // Put the updated route
         postResponse = client.put("/api/v1/route/$documentId") {
-            body = TextContent(routeJson, ContentType.Application.Json)
+            setBody(TextContent(routeJson, ContentType.Application.Json))
         }
         Assertions.assertEquals(HttpStatusCode.OK, postResponse.status)
         val updatedRouteResult = objectMapper.readValue<Route>(postResponse.bodyAsText())
@@ -251,7 +245,6 @@ class RouteTests {
         Assertions.assertEquals(HttpStatusCode.OK, deleteResponse.status)
     }
 
-    @OptIn(InternalAPI::class)
     @Test
     fun testUpdateWithInvalidDocument() = testApplication {
         // Arrange
@@ -271,7 +264,7 @@ class RouteTests {
 
         // Act
         val putResponse = client.put("/api/v1/route/$documentId") {
-            body = TextContent(updatedRouteJson, ContentType.Application.Json)
+            setBody(TextContent(updatedRouteJson, ContentType.Application.Json))
         }
 
         // Assert
@@ -282,7 +275,6 @@ class RouteTests {
         Assertions.assertEquals(HttpStatusCode.NotFound, getResponse.status)
     }
 
-    @OptIn(InternalAPI::class)
     @Test
     fun deleteRouteTest() = testApplication {
         // Create route
@@ -307,7 +299,7 @@ class RouteTests {
 
         // Post the route
         val postResponse = client.post("/api/v1/route/$documentId") {
-            body = TextContent(routeJson, ContentType.Application.Json)
+            setBody(TextContent(routeJson, ContentType.Application.Json))
         }
         Assertions.assertEquals(HttpStatusCode.Created, postResponse.status)
 

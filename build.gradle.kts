@@ -7,7 +7,7 @@ val logback_version: String by project
 
 plugins {
     application
-    kotlin("jvm") version "1.9.22"
+    kotlin("jvm") version "2.3.21"
 }
 
 group = "com.couchbase.kotlin"
@@ -32,19 +32,20 @@ dependencies {
     implementation("io.ktor:ktor-server-content-negotiation:$ktor_version")
     implementation("io.ktor:ktor-serialization-jackson:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
-    implementation("com.couchbase.client:kotlin-client:3.10.1")
+    implementation("com.couchbase.client:kotlin-client:3.12.3")
     implementation("io.insert-koin:koin-ktor:$koin_version")
     implementation("io.insert-koin:koin-logger-slf4j:$koin_version")
     implementation("io.github.config4k:config4k:0.7.0")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.14.4")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.14.4")
     implementation("org.reflections:reflections:0.10.2")
     implementation("dev.forst", "ktor-openapi-generator", "0.6.1")
     implementation("io.ktor:ktor-client-serialization:$ktor_version")
     implementation ("io.ktor:ktor-server-core:$ktor_version")
     implementation("io.ktor:ktor-server-cors-jvm:$ktor_version")
 
-    testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
-    testImplementation("io.mockk:mockk:1.14.0")
+    testImplementation("io.ktor:ktor-server-test-host-jvm:$ktor_version")
+    testImplementation("io.mockk:mockk:1.14.11")
 }
 
 tasks.withType<Jar> {
