@@ -10,7 +10,6 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.testing.*
-import io.ktor.util.*
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -74,7 +73,6 @@ class AirportTests {
         Assertions.assertEquals(limit, results.size)
     }
 
-    @OptIn(InternalAPI::class)
     @Test
     fun getAirportByIdTest() = testApplication {
         // Create airport
@@ -98,7 +96,7 @@ class AirportTests {
 
         // Post the airport
         val postResponse = client.post("/api/v1/airport/$documentId") {
-            body = TextContent(newAirportJson, ContentType.Application.Json)
+            setBody(TextContent(newAirportJson, ContentType.Application.Json))
         }
         Assertions.assertEquals(HttpStatusCode.Created, postResponse.status)
         val newAirportResult = objectMapper.readValue<Airport>(postResponse.bodyAsText())
@@ -130,7 +128,6 @@ class AirportTests {
         Assertions.assertEquals(HttpStatusCode.NotFound, response.status)
     }
 
-    @OptIn(InternalAPI::class)
     @Test
     fun createAirportTest() = testApplication {
         // Create airport
@@ -154,7 +151,7 @@ class AirportTests {
 
         // Post the airport
         val postResponse = client.post("/api/v1/airport/$documentId") {
-            body = TextContent(newAirportJson, ContentType.Application.Json)
+            setBody(TextContent(newAirportJson, ContentType.Application.Json))
         }
         Assertions.assertEquals(HttpStatusCode.Created, postResponse.status)
         val newAirportResult = objectMapper.readValue<Airport>(postResponse.bodyAsText())
@@ -169,7 +166,6 @@ class AirportTests {
         Assertions.assertEquals(HttpStatusCode.OK, deleteResponse.status)
     }
 
-    @OptIn(InternalAPI::class)
     @Test
     fun testAddAirportWithoutRequiredFields() = testApplication {
         // Arrange
@@ -185,7 +181,7 @@ class AirportTests {
 
         // Act
         val postResponse = client.post("/api/v1/airport/$documentId") {
-            body = TextContent(airportJson, ContentType.Application.Json)
+            setBody(TextContent(airportJson, ContentType.Application.Json))
         }
 
         // Assert
@@ -197,7 +193,6 @@ class AirportTests {
     }
 
 
-    @OptIn(InternalAPI::class)
     @Test
     fun testAddDuplicateAirport() = testApplication {
         // Create the airport
@@ -221,13 +216,13 @@ class AirportTests {
 
         // Post the airport
         var postResponse = client.post("/api/v1/airport/$documentId") {
-            body = TextContent(newAirportJson, ContentType.Application.Json)
+            setBody(TextContent(newAirportJson, ContentType.Application.Json))
         }
         Assertions.assertEquals(HttpStatusCode.Created, postResponse.status)
 
         // Try to create the same airport again
         postResponse = client.post("/api/v1/airport/$documentId") {
-            body = TextContent(newAirportJson, ContentType.Application.Json)
+            setBody(TextContent(newAirportJson, ContentType.Application.Json))
         }
         Assertions.assertEquals(HttpStatusCode.Conflict, postResponse.status)
 
@@ -236,7 +231,6 @@ class AirportTests {
         Assertions.assertEquals(HttpStatusCode.OK, deleteResponse.status)
     }
 
-    @OptIn(InternalAPI::class)
     @Test
     fun testUpdateWithInvalidDocument() = testApplication {
         // Arrange
@@ -255,7 +249,7 @@ class AirportTests {
 
         // Act
         val putResponse = client.put("/api/v1/airport/$documentId") {
-            body = TextContent(updatedAirportJson, ContentType.Application.Json)
+            setBody(TextContent(updatedAirportJson, ContentType.Application.Json))
         }
 
         // Assert
@@ -266,7 +260,6 @@ class AirportTests {
         Assertions.assertEquals(HttpStatusCode.NotFound, getResponse.status)
     }
 
-    @OptIn(InternalAPI::class)
     @Test
     fun updateAirportTest() = testApplication {
         // Create airport
@@ -290,7 +283,7 @@ class AirportTests {
 
         // Post the airport
         val postResponse = client.post("/api/v1/airport/$documentId") {
-            body = TextContent(airportJson, ContentType.Application.Json)
+            setBody(TextContent(airportJson, ContentType.Application.Json))
         }
         Assertions.assertEquals(HttpStatusCode.Created, postResponse.status)
         val airportResult = objectMapper.readValue<Airport>(postResponse.bodyAsText())
@@ -303,7 +296,7 @@ class AirportTests {
 
             // Put the updated airport
             val putResponse = client.put("/api/v1/airport/$documentId") {
-                body = TextContent(airportJson, ContentType.Application.Json)
+                setBody(TextContent(airportJson, ContentType.Application.Json))
             }
             Assertions.assertEquals(HttpStatusCode.OK, putResponse.status)
             val updatedAirportResult = objectMapper.readValue<Airport>(putResponse.bodyAsText())
@@ -319,7 +312,6 @@ class AirportTests {
         Assertions.assertEquals(HttpStatusCode.OK, deleteResponse.status)
     }
 
-    @OptIn(InternalAPI::class)
     @Test
     fun deleteAirportTest() = testApplication {
         // Create airport
@@ -343,7 +335,7 @@ class AirportTests {
 
         // Post the airport
         val postResponse = client.post("/api/v1/airport/$documentId") {
-            body = TextContent(newAirportJson, ContentType.Application.Json)
+            setBody(TextContent(newAirportJson, ContentType.Application.Json))
         }
         Assertions.assertEquals(HttpStatusCode.Created, postResponse.status)
 
