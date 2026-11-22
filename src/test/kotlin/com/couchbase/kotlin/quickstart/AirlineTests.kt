@@ -331,4 +331,32 @@ class AirlineTests {
         // Assert
         Assertions.assertEquals(HttpStatusCode.NotFound, response.status)
     }
+
+    @Test
+    fun testSearchInputIsBoundAsQueryParameter() = testApplication {
+        // A quote in user input must be treated as data, not SQL++ syntax.
+        val listResponse = client.get("/api/v1/airline/list") {
+            parameter("country", "United States' OR '1'='1")
+        }
+        Assertions.assertEquals(HttpStatusCode.OK, listResponse.status)
+        Assertions.assertEquals(0, jacksonObjectMapper().readValue<List<Airline>>(listResponse.bodyAsText()).size)
+
+        val toAirportResponse = client.get("/api/v1/airline/to-airport") {
+            parameter("airport", "SFO' OR '1'='1")
+        }
+        Assertions.assertEquals(HttpStatusCode.OK, toAirportResponse.status)
+        Assertions.assertEquals(0, jacksonObjectMapper().readValue<List<Airline>>(toAirportResponse.bodyAsText()).size)
+    }
+
+    @Test
+    fun testListAirlinesCountryFilterIsCaseInsensitive() = testApplication {
+        val getResponse = client.get("/api/v1/airline/list") {
+            parameter("country", "united states")
+            parameter("limit", 5)
+        }
+        Assertions.assertEquals(HttpStatusCode.OK, getResponse.status)
+        val results = jacksonObjectMapper().readValue<List<Airline>>(getResponse.bodyAsText())
+        Assertions.assertEquals(5, results.size)
+        results.forEach { Assertions.assertEquals("United States", it.country) }
+    }
 }
