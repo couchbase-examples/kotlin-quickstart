@@ -367,4 +367,20 @@ class AirportTests {
         // Assert
         Assertions.assertEquals(HttpStatusCode.NotFound, response.status)
     }
+
+    @Test
+    fun testSearchInputIsBoundAsQueryParameter() = testApplication {
+        // A quote in user input must be treated as data, not SQL++ syntax.
+        val listResponse = client.get("/api/v1/airport/list") {
+            parameter("country", "France' OR '1'='1")
+        }
+        Assertions.assertEquals(HttpStatusCode.OK, listResponse.status)
+        Assertions.assertEquals(0, jacksonObjectMapper().readValue<List<Airport>>(listResponse.bodyAsText()).size)
+
+        val directResponse = client.get("/api/v1/airport/direct-connections") {
+            parameter("airport", "SFO' OR '1'='1")
+        }
+        Assertions.assertEquals(HttpStatusCode.OK, directResponse.status)
+        Assertions.assertEquals(0, jacksonObjectMapper().readValue<List<DestinationAirport>>(directResponse.bodyAsText()).size)
+    }
 }
